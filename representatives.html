@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8" />
+	<meta author='Karyn'>
+	<title>House of Representatives</title>
+	<script src="https://d3js.org/d3.v5.min.js"></script>
+	<link href='https://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet' type='text/css'>
+    <style type="text/css">
+		.node circle {
+			stroke: white;
+			stroke-width: .5px;
+		}
+		.title {
+			font-size: 25px;
+			font-family: "Proxima Nova", "Montserrat", sans-serif;
+			color: dimgray;
+			padding: 0.1px 7px;
+			padding-bottom: 0;
+		}
+		.subtitle {
+			font-size: 10px;
+			font-family: "Proxima Nova", "Montserrat", sans-serif;
+			color: dimgray;
+			padding-bottom: 0;
+		}
+
+		.sort-text {
+			font-size: 16px;
+			font-family: "Proxima Nova", "Montserrat", sans-serif;
+			opacity: 0;
+		}
+		
+		.toolbartitle {
+			font-size: 12px;
+			font-family: "Proxima Nova", "Montserrat", sans-serif;
+			color: dimgray;
+			padding: 0.1px 7px;
+			width: 14%;
+			float: left;
+
+		}
+
+		.main {
+			position: relative;
+			height: 0;
+			float: left;
+			width: 83%;
+			padding: 0px;
+			padding-bottom: 100%;
+		}
+
+		.dots {
+			position: absolute;
+			height: 88%;
+			width: 100%;
+			top: 0px;
+		}
+
+		.button {
+			min-width: 130px;
+     		padding: 4px 4px;
+			cursor: pointer;
+			text-align: center;
+			font-size: 12px;
+			border: 1px solid #e0e0e0;
+			text-decoration: none;
+			color: #000
+    	}
+
+		.button.active {
+			background: #fff;
+			color: #000;
+			border: 2px solid black;
+		}
+
+ 	</style>
+</head>
+
+<body>
+	<div class = "title">
+		<p>House of Representatives - 衆議院</p>
+	</div>
+
+	<div id = "toolbartitle", class = "toolbartitle">
+			<p>Color</p>
+			<div  id = "buttons_color">
+				<button id="gender_color" class="button">Gender</button>
+				<button id="kaigi_color" class="button">Nippon Kaigi</button>
+				<button id="party_color" class="button">Party</button>
+			</div>
+			<p>Sort</p>
+			<div  id = "buttons_sort">
+				<button id="gender_sort" class="button">Gender</button>
+				<button id="kaigi_sort" class="button">Nippon Kaigi</button>
+				<button id="party_sort" class="button">Party</button>
+				<button id="none_sort" class="button">None</button>
+			</div>
+	</div>
+
+	<div id="main", class = "main">
+	</div>
+
+
+
+	
+<script type="text/javascript">
+	var width = window.innerWidth, height = window.innerHeight, sizeDivisor = 100, nodePadding = 2.5;
+
+	var party = [
+		{party: "N国", color: "mediumvioletred"},	
+		{party: "公明", color: "palevioletred"}, 
+		{party: "共産", color: "#ff9999"},  
+		{party: "国民", color: "lightpink"}, 
+		{party: "希望", color: "#b0e6d1"}, 
+		{party: "日維", color: "#7fb1b3"}, 
+		{party: "無", color: "#8da0cb"},
+		{party: "社民", color: "#9ecc00"},
+		{party: "立憲", color: "#FFD700"},
+		{party: "自民", color:"gray"}, 
+		{party: "Other", color: "lightgray"},
+		{con: "Unclear", color: "whitesmoke"}]
+
+	tooltip = d3.select("body")
+      .append("div")
+      .style("position", "absolute")
+      .style("z-index", "1")
+      .style("visibility", "hidden")
+      .style("background","white")
+      .style("opacity","0.8")
+      .style("padding","5px")
+      .style("font-family", "'Open Sans', sans-serif")
+	  .style("font-size", "13px")
+	  .style("color", "dark gray");
+
+
+	var svg = d3.select("div#main")
+		.append("svg")
+		.attr("class", "dots")
+		.attr("width", width)
+		.attr("height", height)
+		.attr("viewBox", "0, 0, 1080, 1080") ;
+
+
+	svg.append("text")
+		.text("女性議員(Women) 9%")
+		.attr("class", "sort-text")
+		.attr("id", "gender-text")
+		.attr("text-anchor", "middle")
+		.attr("x", width*0.64)
+		.attr("y", height*0.56);
+
+	svg.append("text")
+		.text("日本会議会員(Members) 42%")
+		.attr("class", "sort-text")
+		.attr("id", "kaigi-text")
+		.attr("text-anchor", "middle")
+		.attr("x", width*0.62)
+		.attr("y", height*0.6);
+
+	svg.append("text")
+		.text("1")
+		.attr("class", "sort-text")
+		.attr("id", "party-text")
+		.attr("text-anchor", "middle")
+		.attr("x", width*0.05)
+		.attr("y", height*0.69);
+
+	svg.append("text")
+		.text("2")
+		.attr("class", "sort-text")
+		.attr("id", "party-text")
+		.attr("text-anchor", "middle")
+		.attr("x", width*0.1)
+		.attr("y", height*0.69);
+
+	svg.append("text")
+		.text("2")
+		.attr("class", "sort-text")
+		.attr("id", "party-text")
+		.attr("text-anchor", "middle")
+		.attr("x", width*0.155)
+		.attr("y", height*0.69);
+
+	svg.append("text")
+		.text("10")
+		.attr("class", "sort-text")
+		.attr("id", "party-text")
+		.attr("text-anchor", "middle")
+		.attr("x", width*0.21)
+		.attr("y", height*0.69);
+
+	svg.append("text")
+		.text("12")
+		.attr("class", "sort-text")
+		.attr("id", "party-text")
+		.attr("text-anchor", "middle")
+		.attr("x", width*0.276)
+		.attr("y", height*0.69);
+
+	svg.append("text")
+		.text("32")
+		.attr("class", "sort-text")
+		.attr("id", "party-text")
+		.attr("text-anchor", "middle")
+		.attr("x", width*0.35)
+		.attr("y", height*0.69);
+
+	svg.append("text")
+		.text("39")
+		.attr("class", "sort-text")
+		.attr("id", "party-text")
+		.attr("text-anchor", "middle")
+		.attr("x", width*0.43)
+		.attr("y", height*0.69);
+
+	svg.append("text")
+		.text("55")
+		.attr("class", "sort-text")
+		.attr("id", "party-text")
+		.attr("text-anchor", "middle")
+		.attr("x", width*0.52)
+		.attr("y", height*0.69);
+
+	svg.append("text")
+		.text("29")
+		.attr("class", "sort-text")
+		.attr("id", "party-text")
+		.attr("text-anchor", "middle")
+		.attr("x", width*0.6)
+		.attr("y", height*0.69);
+
+	svg.append("text")
+		.text("283")
+		.attr("class", "sort-text")
+		.attr("id", "party-text")
+		.attr("text-anchor", "middle")
+		.attr("x", width*0.75)
+		.attr("y", height*0.69);
+
+	svg.append("text")
+		.text("Data from https://democracy.minibird.jp")
+		.attr("class", "subtitle")
+		.attr("text-anchor", "middle")
+		.attr("x", width*0.1)
+		.attr("y", height*0.92); 
+		
+	var simulation = d3.forceSimulation()
+		.force("forceX", d3.forceX().strength(0.09).x(width * 0.5))
+		.force("forceY", d3.forceY().strength(0.09).y(height * 0.5))
+		.force("center", d3.forceCenter().x(width * 0.55).y((height * 0.5)))
+		.force("charge", d3.forceManyBody().strength(-13))
+		//.force("collide", d3.forceCollide().strength(.3).radius(32).iterations(1)); // Force that avoids circle overlapping
+	
+	d3.csv('representatives.csv')
+  		.then(function(data) {
+		
+			simulation
+          		.nodes(data)
+          		.force("collide", d3.forceCollide().strength(.5).radius(3).iterations(1))
+          		.on("tick", function(d){
+            		node
+                		.attr("cx", function(d){ return d.x-200; })
+                		.attr("cy", function(d){ return d.y-100; })
+					});
+
+			var node = svg.append("g")
+				.attr("class", "node")
+				.selectAll("circle")
+				.data(data)
+				.enter().append("circle")
+				.attr("r", 6)
+				.attr("fill", "gray")
+				.attr("fill-opacity", 0.9)
+				.attr("cx", function(d){ return d.x; })
+				.attr("cy", function(d){ return d.y; })
+				.on('mouseover', function (d, i) {
+         			d3.select(this).transition()
+               			.duration('50')
+						.attr('fill-opacity', '.6');
+					tooltip.style("visibility", "visible").text(d.Name + " " + d.Party)
+				})
+				.on("mousemove", d => tooltip.style("top", (d3.event.pageY-10)+"px").style("left",(d3.event.pageX+20)+"px").html("<p>" + d.Name + "</p>" + "<p>" + "(" + d.Party + ")" + "<p/>"))
+				.on('mouseout', function (d, i) {
+          			d3.select(this).transition()
+               			.duration('50')
+					   .attr('fill-opacity', '1');
+					tooltip.style("visibility", "hidden")
+				})	
+  		})
+  		.catch(function(error){ 
+  		});
+
+	d3.select("#gender_color").on("click", function() { 
+		svg.selectAll("circle")
+		.attr("fill", function(d) { 
+			if (d.Gender == "女性") {
+				return "lightpink";
+			}
+			else {
+				return "lightblue";
+			}})
+		d3.select(this).style("border", "2px solid black")
+		d3.select("#kaigi_color").style("border", "1px solid #e0e0e0")
+		d3.select("#party_color").style("border", "1px solid #e0e0e0")
+	})
+
+	d3.select("#kaigi_color").on("click", function() { 
+		svg.selectAll("circle")
+		.attr("fill", function(d) { 
+			if (d.Affiliation == "日本会議") {
+				return "red";
+			}
+			else {
+				return "gray";
+			}})
+		d3.select(this).style("border", "2px solid black")
+		d3.select("#gender_color").style("border", "1px solid #e0e0e0")
+		d3.select("#party_color").style("border", "1px solid #e0e0e0")
+	})
+
+	d3.select("#party_color").on("click", function() { 
+		svg.selectAll("circle")
+		.attr("fill", function(d) { 
+					if (d.Party == "N国") {
+						return "darkviolet";
+					}
+					else if (d.Party == "公明") {
+						return "lightpink";
+					}
+					else if (d.Party == "共産") {
+						return "gold";
+					}
+					else if (d.Party == "国民") {
+						//return "#9ecc00";
+						return "lightskyblue";
+					}
+					else if (d.Party == "希望") {
+						return "limegreen";
+					}
+					else if (d.Party == "日維") {
+						return "#9ecc00";
+						//return "forestgreen"
+					}
+					else if (d.Party == "無") {
+						return "lightgray";
+					}
+					else if (d.Party == "社民") {
+						return "forestgreen";
+					}
+					else if (d.Party == "立憲") {
+						return "#8da0cb";
+					}
+					else if (d.Party == "自民") {
+						return "crimson";
+					}
+				})
+		d3.select(this).style("border", "2px solid black")
+		d3.select("#kaigi_color").style("border", "1px solid #e0e0e0")
+		d3.select("#gender_color").style("border", "1px solid #e0e0e0")
+	})
+
+	var a = d3.scaleOrdinal()
+  		.domain(["男性", "女性"])
+		.range([width*0, width*0.26])
+	
+	d3.select("#gender_sort").on("click", function() { 
+		svg.selectAll("circle")
+		.transition()
+		simulation.force("y", d3.forceY().strength(0.8).y(height*0.3))
+		simulation.force("x", d3.forceX().strength(0.86).x(  function(d){ return a(d.Gender) }))
+		simulation.force("center", d3.forceCenter().x((width * 0.5)).y((height * 0.48)))
+		simulation.force("charge", d3.forceManyBody().strength(-108))
+		d3.select(this).style("border", "2px solid black")
+		d3.select("#party_sort").style("border", "1px solid #e0e0e0")
+		d3.select("#kaigi_sort").style("border", "1px solid #e0e0e0")
+		d3.select("#none_sort").style("border", "1px solid #e0e0e0")
+		d3.selectAll("#gender-text").style("opacity", 1);
+		d3.selectAll("#kaigi-text").style("opacity", 0);
+		d3.selectAll("#party-text").style("opacity", 0);
+		simulation.alpha(0.08).restart();
+	})
+
+	var b = d3.scaleOrdinal()
+  		.domain(["日本会議", ""])
+  		.range([width*0.3, width*0.5])
+
+	d3.select("#kaigi_sort").on("click", function() { 
+		svg.selectAll("circle")
+		.transition()
+		simulation.force("y", d3.forceY().strength(0.97).y(height*0.3))
+		simulation.force("x", d3.forceX().strength(0.8).x(  function(d){ return a(d.Affiliation) }))
+		simulation.force("center", d3.forceCenter().x((width * 0.59)).y((height * 0.45)))
+		simulation.force("charge", d3.forceManyBody().strength(-108))
+		d3.select(this).style("border", "2px solid black")
+		d3.select("#party_sort").style("border", "1px solid #e0e0e0")
+		d3.select("#gender_sort").style("border", "1px solid #e0e0e0")
+		d3.select("#none_sort").style("border", "1px solid #e0e0e0")
+		d3.selectAll("#gender-text").style("opacity", 0);
+		d3.selectAll("#kaigi-text").style("opacity", 1);
+		d3.selectAll("#party-text").style("opacity", 0);
+		simulation.alpha(0.13).restart();
+	})
+
+	var c = d3.scaleOrdinal()
+  		.domain(["N国", "社民", "希望", "日維", "共産", "無", "国民", "立憲", "公明", "自民"])
+  		.range([width*0.2, width*0.27, width*0.34, width*0.41, width*0.48, width*0.55, width*0.62, width*0.69, width*0.76, width*0.83])
+
+	d3.select("#party_sort").on("click", function() { 
+		svg.selectAll("circle")
+		.transition()
+		simulation.force("y", d3.forceY().strength(0.97).y(height*0.3))
+		simulation.force("x", d3.forceX().strength(0.87).x(  function(d){ return c(d.Party) }))
+		simulation.force("center", d3.forceCenter().x((width * 0.8)).y((height * 0.43)))
+		//simulation.force("center", d3.forceCenter().x((888)).y((height * 0.43)))
+		simulation.force("charge", d3.forceManyBody().strength(-100))
+		d3.select(this).style("border", "2px solid black")
+		d3.select("#kaigi_sort").style("border", "1px solid #e0e0e0")
+		d3.select("#gender_sort").style("border", "1px solid #e0e0e0")
+		d3.select("#none_sort").style("border", "1px solid #e0e0e0")
+		d3.selectAll("#gender-text").style("opacity", 0);
+		d3.selectAll("#kaigi-text").style("opacity", 0);
+		d3.selectAll("#party-text").style("opacity", 1);
+		simulation.alpha(0.13).restart();
+	})
+
+	d3.select("#none_sort").on("click", function() { 
+		svg.selectAll("circle")
+		.transition()
+		simulation.force("x", d3.forceX().strength(0.09).x(width * 0.55))
+		simulation.force("y", d3.forceY().strength(0.09).y(height * 0.45))
+		simulation.force("center", d3.forceCenter().x(width * 0.55).y((height * 0.5)))
+		simulation.force("charge", d3.forceManyBody().strength(-26))
+		d3.select(this).style("border", "2px solid black")
+		d3.select("#party_sort").style("border", "1px solid #e0e0e0")
+		d3.select("#gender_sort").style("border", "1px solid #e0e0e0")
+		d3.select("#kaigi_sort").style("border", "1px solid #e0e0e0")
+		d3.selectAll("#gender-text").style("opacity", 0);
+		d3.selectAll("#kaigi-text").style("opacity", 0);
+		d3.selectAll("#party-text").style("opacity", 0);
+		simulation.alpha(0.28).restart();
+	})
+
+
+</script>
+</body>
+</html>
