@@ -79,6 +79,7 @@
      		padding: 4px 4px;
 			cursor: pointer;
 			text-align: center;
+			background: #fff;
 			font-size: 12px;
 			border: 1px solid #e0e0e0;
 			text-decoration: none;
@@ -355,9 +356,9 @@
 			else {
 				return "lightblue";
 			}})
-		d3.select(this).style("border", "2px solid black")
-		d3.select("#kaigi_color").style("border", "1px solid #e0e0e0")
-		d3.select("#party_color").style("border", "1px solid #e0e0e0")
+		d3.select(this).attr("class", "button active")
+		d3.select("#kaigi_color").attr("class", "button")
+		d3.select("#party_color").attr("class", "button")
 	})
 
 	d3.select("#kaigi_color").on("click", function() { 
@@ -369,9 +370,9 @@
 			else {
 				return "gray";
 			}})
-		d3.select(this).style("border", "2px solid black")
-		d3.select("#gender_color").style("border", "1px solid #e0e0e0")
-		d3.select("#party_color").style("border", "1px solid #e0e0e0")
+		d3.select(this).attr("class", "button active")
+		d3.select("#gender_color").attr("class", "button")
+		d3.select("#party_color").attr("class", "button")
 	})
 
 	d3.select("#party_color").on("click", function() { 
@@ -410,9 +411,9 @@
 						return "crimson";
 					}
 				})
-		d3.select(this).style("border", "2px solid black")
-		d3.select("#kaigi_color").style("border", "1px solid #e0e0e0")
-		d3.select("#gender_color").style("border", "1px solid #e0e0e0")
+		d3.select(this).attr("class", "button active")
+		d3.select("#kaigi_color").attr("class", "button")
+		d3.select("#gender_color").attr("class", "button")
 	})
 
 	var a = d3.scaleOrdinal()
@@ -426,10 +427,10 @@
 		simulation.force("x", d3.forceX().strength(0.86).x(  function(d){ return a(d.Gender) }))
 		simulation.force("center", d3.forceCenter().x((width * 0.5)).y((height * 0.48)))
 		simulation.force("charge", d3.forceManyBody().strength(-108))
-		d3.select(this).style("border", "2px solid black")
-		d3.select("#party_sort").style("border", "1px solid #e0e0e0")
-		d3.select("#kaigi_sort").style("border", "1px solid #e0e0e0")
-		d3.select("#none_sort").style("border", "1px solid #e0e0e0")
+		d3.select(this).attr("class", "button active")
+		d3.select("#party_sort").attr("class", "button")
+		d3.select("#kaigi_sort").attr("class", "button")
+		d3.select("#none_sort").attr("class", "button")
 		d3.selectAll("#gender-text").style("opacity", 1);
 		d3.selectAll("#kaigi-text").style("opacity", 0);
 		d3.selectAll("#party-text").style("opacity", 0);
@@ -447,10 +448,10 @@
 		simulation.force("x", d3.forceX().strength(0.8).x(  function(d){ return a(d.Affiliation) }))
 		simulation.force("center", d3.forceCenter().x((width * 0.59)).y((height * 0.45)))
 		simulation.force("charge", d3.forceManyBody().strength(-108))
-		d3.select(this).style("border", "2px solid black")
-		d3.select("#party_sort").style("border", "1px solid #e0e0e0")
-		d3.select("#gender_sort").style("border", "1px solid #e0e0e0")
-		d3.select("#none_sort").style("border", "1px solid #e0e0e0")
+		d3.select(this).attr("class", "button active")
+		d3.select("#party_sort").attr("class", "button")
+		d3.select("#gender_sort").attr("class", "button")
+		d3.select("#none_sort").attr("class", "button")
 		d3.selectAll("#gender-text").style("opacity", 0);
 		d3.selectAll("#kaigi-text").style("opacity", 1);
 		d3.selectAll("#party-text").style("opacity", 0);
@@ -469,10 +470,10 @@
 		simulation.force("center", d3.forceCenter().x((width * 0.8)).y((height * 0.43)))
 		//simulation.force("center", d3.forceCenter().x((888)).y((height * 0.43)))
 		simulation.force("charge", d3.forceManyBody().strength(-100))
-		d3.select(this).style("border", "2px solid black")
-		d3.select("#kaigi_sort").style("border", "1px solid #e0e0e0")
-		d3.select("#gender_sort").style("border", "1px solid #e0e0e0")
-		d3.select("#none_sort").style("border", "1px solid #e0e0e0")
+		d3.select(this).attr("class", "button active")
+		d3.select("#kaigi_sort").attr("class", "button")
+		d3.select("#gender_sort").attr("class", "button")
+		d3.select("#none_sort").attr("class", "button")
 		d3.selectAll("#gender-text").style("opacity", 0);
 		d3.selectAll("#kaigi-text").style("opacity", 0);
 		d3.selectAll("#party-text").style("opacity", 1);
@@ -486,10 +487,10 @@
 		simulation.force("y", d3.forceY().strength(0.09).y(height * 0.45))
 		simulation.force("center", d3.forceCenter().x(width * 0.55).y((height * 0.5)))
 		simulation.force("charge", d3.forceManyBody().strength(-26))
-		d3.select(this).style("border", "2px solid black")
-		d3.select("#party_sort").style("border", "1px solid #e0e0e0")
-		d3.select("#gender_sort").style("border", "1px solid #e0e0e0")
-		d3.select("#kaigi_sort").style("border", "1px solid #e0e0e0")
+		d3.select(this).attr("class", "button active")
+		d3.select("#party_sort").attr("class", "button")
+		d3.select("#gender_sort").attr("class", "button")
+		d3.select("#kaigi_sort").attr("class", "button")
 		d3.selectAll("#gender-text").style("opacity", 0);
 		d3.selectAll("#kaigi-text").style("opacity", 0);
 		d3.selectAll("#party-text").style("opacity", 0);
